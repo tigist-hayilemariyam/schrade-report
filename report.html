@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schrade – Weekend Research by Tigist</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0A0A0F;
+  --surface: #12121A;
+  --surface2: #1A1A25;
+  --border: #2A2A3A;
+  --accent: #E8C547;
+  --text: #E8E8F0;
+  --text-dim: #8888A0;
+  --text-bright: #FFFFFF;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.6;
+}
+
+/* HERO */
+.hero {
+  padding: 4rem 3rem 3rem;
+  border-bottom: 1px solid var(--border);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  color: var(--text-bright);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.hero h1 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.hero-note {
+  font-size: 14px;
+  color: var(--text-dim);
+  max-width: 620px;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+}
+
+.meta-item .val {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-bright);
+  display: block;
+}
+
+.meta-item .key {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* CONTAINER */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem;
+}
+
+/* SECTION HEADER */
+.section { margin-bottom: 4rem; }
+
+.sec-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--text-bright);
+  margin-bottom: 0.5rem;
+}
+
+.sec-desc {
+  font-size: 13.5px;
+  color: var(--text-dim);
+  max-width: 580px;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+/* FILTER TABS */
+.filter-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.filter-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  color: #0A0A0F;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+/* INDUSTRY CARDS */
+.industry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.industry-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.industry-card.hidden {
+  display: none;
+}
+
+.industry-card.highlighted {
+  border-color: var(--accent);
+  background: #16160F;
+}
+
+.industry-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 14px 14px 0 0;
+}
+
+.card-robot::before { background: linear-gradient(90deg, #FF6B6B, #EE0979); }
+.card-med::before { background: linear-gradient(90deg, #E8C547, #F7971E); }
+.card-aero::before { background: linear-gradient(90deg, #4ECDC4, #44A08D); }
+.card-energy::before { background: linear-gradient(90deg, #667eea, #764ba2); }
+.card-agri::before { background: linear-gradient(90deg, #4CAF50, #8BC34A); }
+
+.card-sector {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.card-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.75rem;
+}
+
+.card-cagr {
+  font-family: 'DM Mono', monospace;
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.card-period {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+}
+
+.card-detail {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.65;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.card-source {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #44445A;
+  margin-top: 0.75rem;
+}
+
+/* BAR CHART */
+.bar-chart { margin-top: 1rem; }
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 12px;
+  transition: opacity 0.3s;
+}
+
+.bar-row.dimmed { opacity: 0.2; }
+
+.bar-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 7px;
+  background: var(--surface2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  width: 0;
+  transition: width 0.8s ease-out;
+}
+
+.bar-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-bright);
+  width: 45px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* KPI DASHBOARD */
+.dashboard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.dash-header {
+  background: var(--surface2);
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dash-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.dash-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: #4CAF50;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(76,175,80,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(76,175,80,0); }
+}
+
+.dash-body { padding: 1.5rem; }
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.kpi {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.kpi:hover { border-color: var(--accent); }
+
+.kpi-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-bright);
+  margin-bottom: 4px;
+}
+
+.kpi-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.kpi-delta {
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.up { color: #4CAF50; }
+.down { color: #FF6B6B; }
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.chart-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.chart-box-title {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: 'DM Mono', monospace;
+}
+
+svg.spark { width: 100%; height: 75px; }
+
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.legend { flex: 1; }
+
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-bottom: 7px;
+}
+
+.leg-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* THOUGHTS SECTION */
+.thoughts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.thought-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.thought-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+.thought-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.thought-text {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* IDEAS SECTION */
+.ideas-box {
+  background: linear-gradient(135deg, var(--surface), rgba(232,197,71,0.04));
+  border: 1px solid rgba(232,197,71,0.25);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.ideas-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.ideas-text {
+  font-size: 13.5px;
+  color: var(--text-dim);
+  line-height: 1.85;
+  margin-bottom: 1.25rem;
+}
+
+.ideas-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.idea-tag {
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(232,197,71,0.08);
+  border: 1px solid rgba(232,197,71,0.2);
+  color: var(--accent);
+}
+
+/* AUTHOR */
+.author {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.author-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+
+.author-role {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.author-contact {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+@media (max-width: 680px) {
+  .hero { padding: 2rem 1.5rem; }
+  .container { padding: 1.5rem; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+  .thoughts-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Weekend Research — May 17, 2026</div>
+  <h1>A closer look at<br><em>Schrade Kabeltechnik</em></h1>
+  <p class="hero-note">
+    I came across the Data Analyst job posting on Friday the 15th of May and spent the weekend looking into the industries Schrade works with. This is not a professional report — its just what I found and what I think could be interesting from a data perspective. I tried to keep it honest and not pretend I know everything about the company.
+  </p>
+  <div class="hero-meta">
+    <div class="meta-item">
+      <span class="val">17. Mai 2026</span>
+      <span class="key">Erstellt an einem Wochenende</span>
+    </div>
+    <div class="meta-item">
+      <span class="val">5 Branchen</span>
+      <span class="key">Analysiert</span>
+    </div>
+    <div class="meta-item">
+      <span class="val">ZVEI, VDMA, Statista</span>
+      <span class="key">Quellen</span>
+    </div>
+    <div class="meta-item">
+      <span class="val">Tigist Hayilemariyam</span>
+      <span class="key">Bewerberin — Data Analyst</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SECTION 1: INDUSTRIES -->
+  <div class="section">
+    <div class="sec-label">Teil 01</div>
+    <div class="sec-title">Die Branchen von Schrade — was ich herausgefunden habe</div>
+    <p class="sec-desc">
+      Schrade beliefert laut Website funf Hauptbereiche. Ich habe fur jeden Bereich die aktuellen Wachstumszahlen recherchiert. Was mich ehrlich gesagt am meisten uberrascht hat war der Robotik-Markt — die Zahlen sind deutlich hoher als ich erwartet hatte.
+    </p>
+
+    <!-- FILTER BUTTONS -->
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterCards('all')">Alle Branchen</button>
+      <button class="filter-btn" onclick="filterCards('robotics')">Robotics</button>
+      <button class="filter-btn" onclick="filterCards('med')">Medizintechnik</button>
+      <button class="filter-btn" onclick="filterCards('aero')">Aerospace</button>
+      <button class="filter-btn" onclick="filterCards('energy')">Energietechnik</button>
+      <button class="filter-btn" onclick="filterCards('agri')">Landmaschinen</button>
+    </div>
+
+    <!-- CARDS -->
+    <div class="industry-grid">
+
+      <div class="industry-card card-robot" data-sector="robotics">
+        <div class="card-sector">Robotics & Automation</div>
+        <div class="card-name">Der starkste Wachstumsmarkt</div>
+        <div class="card-cagr" style="color:#FF6B6B">+16.6%</div>
+        <div class="card-period">CAGR 2024 bis 2034 — Globaler Markt: $47.8B heute, $211B bis 2034</div>
+        <div class="card-detail">
+          This was the number that really stood out to me. Every robot needs cables in its joints and control systems and the demand for flexible high cycle harnesses is growing fast especially with the new humanoid robot projects coming from different companies. I think this could become Schrade's most important segment in the next few years.
+        </div>
+        <div class="card-source">Quelle: GM Insights 2025, VDMA Robotics 2026</div>
+      </div>
+
+      <div class="industry-card card-med" data-sector="med">
+        <div class="card-sector">Medizintechnik</div>
+        <div class="card-name">Regulierung als Chance</div>
+        <div class="card-cagr" style="color:#E8C547">+8.2%</div>
+        <div class="card-period">CAGR 2024 bis 2030 — Deutschland ist der groste EU Markt</div>
+        <div class="card-detail">
+          What I found interesting here is the MDR 2024 regulation. It is forcing medical companies to work with fewer but more certified suppliers. That could actually be good for Schrade if they are already certified — because smaller competitors might struggle with the certification costs and drop out of this market.
+        </div>
+        <div class="card-source">Quelle: ZVEI Medizintechnik 2025, Statista</div>
+      </div>
+
+      <div class="industry-card card-aero" data-sector="aero">
+        <div class="card-sector">Aerospace & Sonderfahrzeuge</div>
+        <div class="card-name">Airbus Auftragsruckstand als Signal</div>
+        <div class="card-cagr" style="color:#4ECDC4">+7.5%</div>
+        <div class="card-period">CAGR 2025 bis 2034 — Airbus Auftragsbestand uber 8700 Flugzeuge</div>
+        <div class="card-detail">
+          I did not realise how much cable goes into a single aircraft — apparently between 200 and 600 km per plane. With the Airbus backlog at over 8700 units that is a lot of cable assembly work for years to come. The defence vehicles segment also looks interesting given what is happening with EU budgets right now.
+        </div>
+        <div class="card-source">Quelle: GM Insights Machine Tools 2025</div>
+      </div>
+
+      <div class="industry-card card-energy" data-sector="energy">
+        <div class="card-sector">Energietechnik</div>
+        <div class="card-name">Energiewende treibt Investitionen</div>
+        <div class="card-cagr" style="color:#667eea">+5.5%</div>
+        <div class="card-period">CAGR 2025 bis 2030 — Netzerneuerung und erneuerbare Energien</div>
+        <div class="card-detail">
+          The ZVEI published their forecast in January 2026 and they expect the German electro and digital industry to grow again by about 2 percent in 2026 after three years of stagnation. That is not huge growth but it is a clear signal that investment is coming back. The grid modernisation projects need a lot of cable infrastructure.
+        </div>
+        <div class="card-source">Quelle: ZVEI Jahresauftakt Januar 2026</div>
+      </div>
+
+      <div class="industry-card card-agri" data-sector="agri">
+        <div class="card-sector">Landmaschinen</div>
+        <div class="card-name">Elektrifizierung der Landwirtschaft</div>
+        <div class="card-cagr" style="color:#4CAF50">+4.8%</div>
+        <div class="card-period">CAGR 2025 bis 2030 — Elektrische Traktoren und Prazisionslandwirtschaft</div>
+        <div class="card-detail">
+          This one surprised me a bit. Electric tractors and precision farming sensors are creating much more complex cable requirements than traditional machines. The VDMA reported order intake in agricultural machinery was up 17 percent in December 2025 which is a positive sign for the whole supply chain.
+        </div>
+        <div class="card-source">Quelle: VDMA Konjunktur Q4/2025</div>
+      </div>
+
+    </div>
+
+    <!-- BAR CHART -->
+    <div style="margin-top:1.5rem;">
+      <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--accent); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:1rem;">Wachstumsvergleich — CAGR der Schrade Markte</div>
+      <div class="bar-chart">
+        <div class="bar-row" data-sector="robotics">
+          <div class="bar-label">Robotics</div>
+          <div class="bar-track"><div class="bar-fill" data-width="100" style="background:linear-gradient(90deg,#FF6B6B,#EE0979)"></div></div>
+          <div class="bar-val">16.6%</div>
+        </div>
+        <div class="bar-row" data-sector="med">
+          <div class="bar-label">Medizintechnik</div>
+          <div class="bar-track"><div class="bar-fill" data-width="49" style="background:linear-gradient(90deg,#E8C547,#F7971E)"></div></div>
+          <div class="bar-val">8.2%</div>
+        </div>
+        <div class="bar-row" data-sector="aero">
+          <div class="bar-label">Aerospace</div>
+          <div class="bar-track"><div class="bar-fill" data-width="45" style="background:linear-gradient(90deg,#4ECDC4,#44A08D)"></div></div>
+          <div class="bar-val">7.5%</div>
+        </div>
+        <div class="bar-row" data-sector="energy">
+          <div class="bar-label">Energietechnik</div>
+          <div class="bar-track"><div class="bar-fill" data-width="33" style="background:linear-gradient(90deg,#667eea,#764ba2)"></div></div>
+          <div class="bar-val">5.5%</div>
+        </div>
+        <div class="bar-row" data-sector="agri">
+          <div class="bar-label">Landmaschinen</div>
+          <div class="bar-track"><div class="bar-fill" data-width="29" style="background:linear-gradient(90deg,#4CAF50,#8BC34A)"></div></div>
+          <div class="bar-val">4.8%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: DASHBOARD -->
+  <div class="section">
+    <div class="sec-label">Teil 02</div>
+    <div class="sec-title">How a dashboard for Schrade could look</div>
+    <p class="sec-desc">
+      I tried to sketch out what kind of KPIs would make sense for a company like Schrade — especially for reporting to the US parent company Infinite Electronics. The numbers here are made up of course but the structure is what I was thinking about.
+    </p>
+
+    <div class="dashboard">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">Schrade Kabeltechnik — Executive Overview</div>
+          <div class="dash-sub">Q1 2026 — Deutschland und Polen konsolidiert — Berichtslinie: Infinite Electronics USA</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="live-dot"></div>
+          <span style="font-size:11px;color:var(--text-dim)">Simulierte Daten</span>
+        </div>
+      </div>
+      <div class="dash-body">
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="kpi-val">€12.4M</div>
+            <div class="kpi-label">Umsatz YTD</div>
+            <div class="kpi-delta up">▲ +8.2% vs Vorjahr</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val">384</div>
+            <div class="kpi-label">Mitarbeitende</div>
+            <div class="kpi-delta up">▲ +16 seit Q4</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val">94.7%</div>
+            <div class="kpi-label">Liefertreue</div>
+            <div class="kpi-delta down">▼ -1.2pp vs Ziel</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-val">€847K</div>
+            <div class="kpi-label">EBIT Q1</div>
+            <div class="kpi-delta up">▲ +12.1% vs Vorjahr</div>
+          </div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-box">
+            <div class="chart-box-title">Umsatztrend — monatlich in Tausend Euro</div>
+            <svg class="spark" viewBox="0 0 300 75">
+              <defs>
+                <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#E8C547" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#E8C547" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,62 L50,55 L100,50 L150,42 L200,35 L250,28 L300,18" fill="none" stroke="#E8C547" stroke-width="2" stroke-linecap="round"/>
+              <path d="M0,62 L50,55 L100,50 L150,42 L200,35 L250,28 L300,18 L300,75 L0,75 Z" fill="url(#g1)"/>
+              <circle cx="300" cy="18" r="3.5" fill="#E8C547"/>
+              <text x="255" y="14" fill="#E8C547" font-size="9" font-family="DM Mono,monospace">€4.2M</text>
+              <text x="2" y="73" fill="#44445A" font-size="8" font-family="DM Mono,monospace">Okt</text>
+              <text x="90" y="73" fill="#44445A" font-size="8" font-family="DM Mono,monospace">Dez</text>
+              <text x="183" y="73" fill="#44445A" font-size="8" font-family="DM Mono,monospace">Feb</text>
+              <text x="263" y="73" fill="#44445A" font-size="8" font-family="DM Mono,monospace">Apr</text>
+            </svg>
+          </div>
+          <div class="chart-box">
+            <div class="chart-box-title">Umsatz nach Segment</div>
+            <div class="donut-wrap">
+              <svg width="85" height="85" viewBox="0 0 90 90">
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#FF6B6B" stroke-width="11" stroke-dasharray="88 132" stroke-dashoffset="0" transform="rotate(-90 45 45)"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#4ECDC4" stroke-width="11" stroke-dasharray="66 154" stroke-dashoffset="-88" transform="rotate(-90 45 45)"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#E8C547" stroke-width="11" stroke-dasharray="44 176" stroke-dashoffset="-154" transform="rotate(-90 45 45)"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#4CAF50" stroke-width="11" stroke-dasharray="26 194" stroke-dashoffset="-198" transform="rotate(-90 45 45)"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#667eea" stroke-width="11" stroke-dasharray="20 200" stroke-dashoffset="-224" transform="rotate(-90 45 45)"/>
+              </svg>
+              <div class="legend">
+                <div class="leg-item"><div class="leg-dot" style="background:#FF6B6B"></div>Robotics 40%</div>
+                <div class="leg-item"><div class="leg-dot" style="background:#4ECDC4"></div>Aerospace 30%</div>
+                <div class="leg-item"><div class="leg-dot" style="background:#E8C547"></div>Medizintechnik 20%</div>
+                <div class="leg-item"><div class="leg-dot" style="background:#4CAF50"></div>Landmaschinen 6%</div>
+                <div class="leg-item"><div class="leg-dot" style="background:#667eea"></div>Energie 4%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: THOUGHTS -->
+  <div class="section">
+    <div class="sec-label">Teil 03</div>
+    <div class="sec-title">Was mir aufgefallen ist</div>
+    <p class="sec-desc">
+      A few things that came to mind while I was reading about Schrade and its markets. I am not saying these are problems — I just noticed them and thought they might be worth thinking about from a data side.
+    </p>
+
+    <div class="thoughts-grid">
+      <div class="thought-card">
+        <div class="thought-num">GEDANKE 01</div>
+        <div class="thought-title">Robotik wachst am schnellsten — aber ist es auch das grosste Segment?</div>
+        <div class="thought-text">
+          With 16.6 percent CAGR Robotics is clearly growing the fastest but I could not find any public information about how much of Schrade's current revenue comes from this segment. If it is still small it might be worth tracking it more closely — because fast growth in a small segment can easily be missed if you only look at total revenue numbers.
+        </div>
+      </div>
+      <div class="thought-card">
+        <div class="thought-num">GEDANKE 02</div>
+        <div class="thought-title">Berichte an Infinite Electronics — einheitliche KPIs waren hilfreich</div>
+        <div class="thought-text">
+          I noticed that Schrade is part of Infinite Electronics in the US. In my experience with data work, when a subsidiary reports to a parent company the biggest challenge is usually that the KPI definitions are slightly different on each side. Having one consistent dashboard that both sides understand would probably save a lot of time every month.
+        </div>
+      </div>
+      <div class="thought-card">
+        <div class="thought-num">GEDANKE 03</div>
+        <div class="thought-title">MDR 2024 konnte eine Chance fur Schrade sein</div>
+        <div class="thought-text">
+          The new EU medical device regulation is making it harder for smaller suppliers to stay certified. If Schrade already meets the certification requirements that could become a real advantage — because medical OEMs are being pushed to reduce their supplier base. I think this would be interesting to track as a KPI: how many new medical customers are coming from competitors who dropped out.
+        </div>
+      </div>
+      <div class="thought-card">
+        <div class="thought-num">GEDANKE 04</div>
+        <div class="thought-title">Liefertreue als kritischer KPI im Aerospace Bereich</div>
+        <div class="thought-text">
+          In aerospace even a small delay in a cable assembly can stop an entire production line. That makes on time delivery probably the most important KPI for this segment. I would think about tracking it separately per customer segment rather than as one overall number — because a 95 percent average can hide a 70 percent rate in the most critical segment.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: IDEAS -->
+  <div class="section">
+    <div class="sec-label">Teil 04</div>
+    <div class="sec-title">Ein paar Ideen — falls sie nutzlich sind</div>
+
+    <div class="ideas-box">
+      <div class="ideas-title">Was ich beitragen konnte — ehrlich gesagt</div>
+      <div class="ideas-text">
+        I want to be upfront — I do not know Schrade's internal systems yet and I am still learning. But based on what I found this weekend, here are a few things I think I could help with if I got the chance.
+        <br><br>
+        The reporting to Infinite Electronics sounds like something that could be made more automatic. Right now I imagine someone is probably exporting data from one system and reformating it manually every month. I have done this kind of ETL work in Python before — connecting to a database, cleaning the data, and outputting a structured report. It is not the most exciting work but it saves a lot of time.
+        <br><br>
+        The other thing that caught my attention is the five different industry segments. Each one has very different growth rates and risk profiles. A simple dashboard that shows how each segment is performing relative to its market CAGR would make it much easier to see early if one segment is falling behind — or growing faster than expected.
+      </div>
+      <div class="ideas-tags">
+        <span class="idea-tag">Python ETL</span>
+        <span class="idea-tag">Power BI Reporting</span>
+        <span class="idea-tag">SQL Datenbankanbindung</span>
+        <span class="idea-tag">Segment KPI Tracking</span>
+        <span class="idea-tag">Automatisiertes Reporting</span>
+        <span class="idea-tag">Infinite Electronics Schnittstelle</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTHOR -->
+  <div class="author">
+    <div>
+      <div class="author-name">Tigist Hayilemariyam</div>
+      <div class="author-role">Bewerberin — Data Analyst bei Schrade Kabeltechnik GmbH, Allmendingen</div>
+    </div>
+    <div class="author-contact">tigisthayilemariyam@gmail.com · +49 160 2369640</div>
+  </div>
+
+</div>
+
+<script>
+// Animate bars on load
+window.addEventListener('load', () => {
+  document.querySelectorAll('.bar-fill').forEach(bar => {
+    const w = bar.dataset.width;
+    setTimeout(() => { bar.style.width = w + '%'; }, 300);
+  });
+});
+
+// Filter function
+function filterCards(sector) {
+  // Update buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  // Filter cards
+  document.querySelectorAll('.industry-card').forEach(card => {
+    if (sector === 'all' || card.dataset.sector === sector) {
+      card.classList.remove('hidden');
+      card.classList.toggle('highlighted', sector !== 'all');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  // Dim/highlight bar rows
+  document.querySelectorAll('.bar-row').forEach(row => {
+    if (sector === 'all' || row.dataset.sector === sector) {
+      row.classList.remove('dimmed');
+    } else {
+      row.classList.add('dimmed');
+    }
+  });
+
+  // Re-animate bars
+  document.querySelectorAll('.bar-fill').forEach(bar => {
+    const row = bar.closest('.bar-row');
+    if (sector === 'all' || row.dataset.sector === sector) {
+      bar.style.width = '0';
+      setTimeout(() => { bar.style.width = bar.dataset.width + '%'; }, 100);
+    }
+  });
+}
+</script>
+
+</body>
+</html>
